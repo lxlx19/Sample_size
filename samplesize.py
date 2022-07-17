@@ -47,14 +47,7 @@ class SampleSizeCalculator:
 
         return round(e, 4)
 
-
-population_size = 127
-confidence_level = 0.95
-margin_of_error = 0.05
-target_population = 0.5
-
-
-sample = SampleSizeCalculator(127, 0.95, 0.05)
+sample = SampleSizeCalculator(10000, 0.95, 0.05)
 
 print(sample.calculate())
-print(sample.m_error(100))
+print(sample.m_error(400))
