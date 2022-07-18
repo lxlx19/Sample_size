@@ -1,4 +1,5 @@
-from math import ceil
+from math import ceil, sqrt
+
 import scipy.stats as stats
 
 
@@ -15,7 +16,7 @@ class SampleSizeCalculator:
         self.N = N
         self.cl = cl
         self.e = e
-        self.p = 0.5 # Target population mean
+        self.p = 0.5  # Target population mean
 
     def calculate(self):
         """_summary_
@@ -23,11 +24,12 @@ class SampleSizeCalculator:
         Returns:
             int: sample size
         """
-        # calculate the z-score (the difference between the target population and the mean)
+        # calculate the z-score
+        # (the difference between the target population and the mean)
         z = stats.norm.ppf(1 - (1 - self.cl) / 2)
 
         # Cochran's formula for the sample size
-        n_0 = z**2 * self.p * (1 - self.p) / self.e**2
+        n_0 = z ** 2 * self.p * (1 - self.p) / self.e ** 2
 
         n = n_0 / (1 + (n_0 - 1) / self.N)
 
@@ -40,14 +42,15 @@ class SampleSizeCalculator:
             float: margin of error
         """
 
-        # calculate the z-score (the difference between the target population and the mean)
         z = stats.norm.ppf(1 - (1 - self.cl) / 2)
 
-        e = z * 0.5 / (((self.N - 1) * s) / (self.N - s)) ** 0.5
+        e = z * 0.5 / sqrt(((self.N - 1) * s) / (self.N - s))
 
         return round(e, 4)
 
-sample = SampleSizeCalculator(10000, 0.95, 0.05)
+
+sample = SampleSizeCalculator(127, 0.95, 0.05)
 
 print(sample.calculate())
-print(sample.m_error(400))
+
+print(sample.m_error(62))
